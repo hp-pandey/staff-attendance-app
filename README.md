@@ -1,36 +1,83 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Staff Attendance & Payroll Manager
 
-## Getting Started
+A full-stack web app to manage staff attendance, advances, and payments — built for small construction/contractor businesses.
 
-First, run the development server:
+[![Deploy on Railway](https://railway.com/button.svg)](https://railway.com/new/template?template=https://github.com/hp-pandey/staff-attendance-app)
+
+---
+
+## Features
+
+| Module | What it does |
+|--------|-------------|
+| **Dashboard** | Daily snapshot — present / absent / late / overtime counts, total advances & payments |
+| **Staff** | Add, edit, deactivate staff with role, phone, work site |
+| **Attendance** | One-click status marking per staff per day (present / absent / late / overtime) |
+| **Payments** | Record payments per staff member, running total |
+| **Advances** | Track salary advances, mark as repaid / pending |
+| **Work Sites** | Manage construction sites assigned to staff |
+
+> No salary calculations or costing — purely record-keeping.
+
+---
+
+## Tech Stack
+
+- **Next.js 16** (App Router) + TypeScript
+- **Tailwind CSS**
+- **Prisma 7** + SQLite (`better-sqlite3`)
+- No external database service required
+
+---
+
+## Local Development
 
 ```bash
+# 1. Clone and install
+git clone https://github.com/hp-pandey/staff-attendance-app
+cd staff-attendance-app
+npm install
+
+# 2. Set up the database
+echo 'DATABASE_URL="file:./dev.db"' > .env
+npx prisma migrate dev
+
+# 3. Start the dev server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Deploy to Railway
 
-## Learn More
+Railway gives you a persistent server with disk storage — SQLite works perfectly.
 
-To learn more about Next.js, take a look at the following resources:
+1. Go to [railway.com](https://railway.com) → **New Project → Deploy from GitHub repo**
+2. Select this repo (`hp-pandey/staff-attendance-app`)
+3. Add these environment variables:
+   ```
+   DATABASE_URL=file:/data/staff.db
+   NODE_ENV=production
+   ```
+4. **Settings → Volumes** → Add a volume mounted at `/data`
+5. Click **Deploy**
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Railway automatically runs `prisma migrate deploy && npm start`.
+Your app goes live at `https://your-app.up.railway.app` — share that URL with anyone.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## Environment Variables
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+| Variable | Local | Production |
+|----------|-------|------------|
+| `DATABASE_URL` | `file:./dev.db` | `file:/data/staff.db` |
+| `NODE_ENV` | `development` | `production` |
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+## Feedback
+
+Open an issue on this repo with your feedback or bug reports.

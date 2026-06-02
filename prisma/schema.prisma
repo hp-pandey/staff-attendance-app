@@ -1,0 +1,60 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model WorkSite {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique
+  location  String?
+  createdAt DateTime @default(now())
+  staff     Staff[]
+}
+
+model Staff {
+  id         Int          @id @default(autoincrement())
+  name       String
+  role       String?
+  phone      String?
+  joinedAt   DateTime     @default(now())
+  workSiteId Int?
+  workSite   WorkSite?    @relation(fields: [workSiteId], references: [id])
+  attendance Attendance[]
+  advances   Advance[]
+  payments   Payment[]
+  active     Boolean      @default(true)
+}
+
+model Attendance {
+  id      Int     @id @default(autoincrement())
+  staffId Int
+  staff   Staff   @relation(fields: [staffId], references: [id], onDelete: Cascade)
+  date    String
+  status  String
+  hours   Float?
+  note    String?
+
+  @@unique([staffId, date])
+}
+
+model Advance {
+  id      Int     @id @default(autoincrement())
+  staffId Int
+  staff   Staff   @relation(fields: [staffId], references: [id], onDelete: Cascade)
+  amount  Float
+  date    String
+  repaid  Boolean @default(false)
+  note    String?
+}
+
+model Payment {
+  id      Int     @id @default(autoincrement())
+  staffId Int
+  staff   Staff   @relation(fields: [staffId], references: [id], onDelete: Cascade)
+  amount  Float
+  date    String
+  note    String?
+}
